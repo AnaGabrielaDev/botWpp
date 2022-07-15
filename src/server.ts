@@ -4,11 +4,12 @@ import puppeteer from 'puppeteer';
 
 async function main(name: string) {
     const browser = await puppeteer.launch({
-        headless: true,
+        args: ["--no-sandbox", "--disabled-setupid-sandbox"],
+        headless: false,
     });
 
     const page = await browser.newPage();
-    await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36');
+    await page.setUserAgent('Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36');
     await page.goto('https://web.whatsapp.com', {
         waitUntil: 'load',
     });
@@ -22,25 +23,25 @@ async function main(name: string) {
     `);
 
     await page.waitForNavigation({
-        timeout: 5000 //5 seconds
+        timeout: 500000 //5 seconds
     });
 
     await page.waitForTimeout(2000); //2 seconds
 
-    const contact = await page.waitForSelector(`span[title='${name}']`);
+    const contact = await page.waitForSelector(`span[title="${name}"]`);
     contact?.click();
 
-    const chat = await page.waitForSelector(`("div[class='_1UWac _1LbR4']"`);
+    const chat = await page.waitForSelector("div[class='fd365im1 to2l77zo bbv8nyr4 mwp4sxku gfz4du6o ag5g9lrv']");
     await chat?.click();
 
-    const script = readFileSync(join(__dirname, 'talks', 'shrek.txt'), 'utf8');
-    const talks = script.split('\n');
+    const script = readFileSync(join(__dirname, 'talks', 'hulkvsthor.txt'), 'utf8')
+    const talks = script.split('\n')
 
     const total = talks.length;
 
     for (const [index, talk] of talks.entries()) {
         await chat!.type(talk);
-        await page.waitForTimeout(100);
+        await page.waitForTimeout(1000);
         await chat!.press('Enter');
     
         console.log(`${index} / ${total} messages sent`);
