@@ -3,7 +3,6 @@ import { readFileSync } from 'fs';
 import puppeteer from 'puppeteer';
 
 async function main(name: string) {
-    const [, __dirname] = dirname(import.meta.url).split('file://');
     const browser = await puppeteer.launch({
         headless: true,
     });
